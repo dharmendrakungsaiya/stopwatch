@@ -2,50 +2,50 @@ import React, { useState, useEffect } from 'react';
 
 const Stopwatch = () => {
     const[isActive, setIsActive] = useState(false);
-    const[isStop, setIsStop] = useState(false);
     const[time, setTime] = useState(0);
 
 
     useEffect(()=>{
         let interval = null;
 
-        if(isActive && isStop===false){
+        if(isActive){
         interval = setInterval(()=>{
-            setTime((time)=>time+1000);
-        },1000)
+            setTime((time)=>time+10);
+        },10)
     }
 
         return()=>{
             clearInterval(interval)
         }
 
-    },[isActive,isStop]);
+    },[isActive]);
     
-    const handleStart = () => {
-        setIsActive(true);
-        setIsStop(false);
-    }
 
-    const handleStop = () => {
-        setIsStop(!isStop);
-    }
+
+    const handleStartStop = () => {
+        setIsActive(prevState => !prevState);
+    };
 
     const handleReset = () => {
         setIsActive(false);
         setTime(0);
     }
+
+    const minutes = Math.floor((time % 360000) / 6000);
+    const seconds = Math.floor((time % 6000) / 100);
+
+
     return(
-        <div>
-            <div>
+        <div style={{padding: '10px'}}>
+            
             <h1>Stopwatch</h1>
             {console.log("time", time)}
-            <p>Time : </p>
-            <button onClick={handleStart}>Start</button>
-            <button onClick={handleStop}>Stop</button>
+            <p>Time: {minutes}:{seconds<10? '0'+seconds : seconds}</p>
+            <button onClick={handleStartStop}>{isActive ? 'Stop' : 'Start'}</button>
             <button onClick={handleReset}>Reset</button>
             
         </div>
-        </div>
+        
     )
 }
 
